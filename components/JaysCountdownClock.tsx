@@ -91,8 +91,9 @@ export default function BlueJaysCountdown() {
     });
 
   const opponentLogo =
-    opponent &&
-    `https://www.mlbstatic.com/team-logos/${opponent.id}.svg`;
+    opponent ?
+    `https://www.mlbstatic.com/team-logos/${opponent.id}.svg`
+    : undefined;
 
   return (
     <div className="text-white text-center space-y-4">
