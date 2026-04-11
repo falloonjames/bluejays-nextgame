@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 type Opponent = {
   name: string;
@@ -99,11 +100,15 @@ export default function BlueJaysCountdown() {
     <div className="text-white text-center space-y-4">
       {opponent && (
         <>
-          <img
+          {opponentLogo && (
+          <Image
             src={opponentLogo}
             alt={opponent.name}
-            className="w-20 mx-auto"
+            width={80}
+            height={80}
+            className="mx-auto"
           />
+        )}
 
           <h2 className="text-2xl font-semibold">
             Next game vs {opponent.name}
