@@ -13,6 +13,10 @@ export default function BlueJaysCountdown() {
   const [timeLeft, setTimeLeft] = useState("");
   const [opponent, setOpponent] = useState<Opponent | null>(null);
   const [isHomeGame, setIsHomeGame] = useState<boolean | null>(null);
+  const [gameToday, setGameToday] = useState<boolean | null>(null);
+
+  const todayStr = new Date().toISOString().split("T")[0];
+  let foundTodayGame = false;
 
   useEffect(() => {
     async function fetchNextGame() {
@@ -32,24 +36,31 @@ export default function BlueJaysCountdown() {
       const now = new Date();
 
       for (const date of data.dates) {
+        if (date.date === todayStr && date.games.length > 0) {
+          foundTodayGame = true;
+        }
+      
         for (const game of date.games) {
           const gameDate = new Date(game.gameDate);
-
+      
           if (gameDate > now) {
             setNextGame(gameDate);
-
+      
             const away = game.teams.away.team;
             const home = game.teams.home.team;
-
-            const opponentTeam = away.id === 141 ? home : away;
-
+      
+            const opponentTeam =
+              away.id === 141 ? home : away;
+      
             setOpponent({
               name: opponentTeam.name,
               id: opponentTeam.id,
             });
-
+      
             setIsHomeGame(home.id === 141);
-
+      
+            setGameToday(foundTodayGame);
+      
             return;
           }
         }
@@ -99,6 +110,20 @@ export default function BlueJaysCountdown() {
     : undefined;
 
   return (
+    <>
+    <div className="w-full text-center fixed top-0 left-0">
+  {gameToday !== null && (
+    <div
+      className={`py-3 text-lg font-bold tracking-wide ${
+        gameToday ? "bg-green-600" : "bg-red-600"
+      } text-white`}
+    >
+      {gameToday
+        ? "GAME TODAY ⚾"
+        : "NO GAME TODAY"}
+    </div>
+  )}
+</div>
     <div className="text-white text-center space-y-4">
       {opponent && (
         <>
@@ -112,9 +137,15 @@ export default function BlueJaysCountdown() {
         />
         )}
           {isHomeGame !== null && (
-          <div className="text-lg font-semibold">
-            {isHomeGame ? "🏠 HOME GAME" : "✈️ AWAY GAME"}
-          </div>
+  <div
+    className={`inline-block px-4 py-1 rounded-full font-semibold text-sm ${
+      isHomeGame
+        ? "bg-blue-600 text-white"
+        : "bg-gray-700 text-white"
+    }`}
+  >
+    {isHomeGame ? "HOME GAME" : "AWAY GAME"}
+  </div>
 )}
           <h2 className="text-2xl font-semibold">
             vs {opponent.name}
@@ -132,5 +163,6 @@ export default function BlueJaysCountdown() {
         {timeLeft}
       </div>
     </div>
+    </>
   );
 }
