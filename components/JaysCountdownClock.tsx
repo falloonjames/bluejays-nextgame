@@ -102,12 +102,12 @@ export default function BlueJaysCountdown() {
         <>
           {opponentLogo && (
           <Image
-            src={opponentLogo}
-            alt={opponent.name}
-            width={80}
-            height={80}
-            className="mx-auto"
-          />
+          src={opponentLogo}
+          alt={opponent.name}
+          width={80}
+          height={80}
+          className="mx-auto drop-shadow-[0_0_2px_white] drop-shadow-[0_0_6px_white]"
+        />
         )}
 
           <h2 className="text-2xl font-semibold">
