@@ -12,6 +12,7 @@ export default function BlueJaysCountdown() {
   const [nextGame, setNextGame] = useState<Date | null>(null);
   const [timeLeft, setTimeLeft] = useState("");
   const [opponent, setOpponent] = useState<Opponent | null>(null);
+  const [isHomeGame, setIsHomeGame] = useState<boolean | null>(null);
 
   useEffect(() => {
     async function fetchNextGame() {
@@ -40,13 +41,14 @@ export default function BlueJaysCountdown() {
             const away = game.teams.away.team;
             const home = game.teams.home.team;
 
-            const opponentTeam =
-              away.id === 141 ? home : away;
+            const opponentTeam = away.id === 141 ? home : away;
 
             setOpponent({
               name: opponentTeam.name,
               id: opponentTeam.id,
             });
+
+            setIsHomeGame(home.id === 141);
 
             return;
           }
@@ -109,9 +111,13 @@ export default function BlueJaysCountdown() {
           className="mx-auto drop-shadow-[0_0_2px_white] drop-shadow-[0_0_6px_white]"
         />
         )}
-
+          {isHomeGame !== null && (
+          <div className="text-lg font-semibold">
+            {isHomeGame ? "🏠 HOME GAME" : "✈️ AWAY GAME"}
+          </div>
+)}
           <h2 className="text-2xl font-semibold">
-            Next game vs {opponent.name}
+            vs {opponent.name}
           </h2>
         </>
       )}
